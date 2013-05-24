@@ -17,6 +17,12 @@
 </head>
 
 <body>
+<div style="position: absolute; left: 50%;">
+    <div style="position: relative; left: -50%;">
+        <input id="search"/>
+        <input type="button" id="find" value="Найти адрес"/>
+    </div>
+</div>
 </body>
 
 </html>
