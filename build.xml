@@ -1,0 +1,65 @@
+<project name="openpolice">
+    <property name="rootProjectDirName" value="openpolice"/>
+    <property name="cssJsFileName" value="op"/>
+
+
+    <target name="default">
+		<antcall target="init"></antcall>
+        <antcall target="python-build-scripts"></antcall>
+		<antcall target="compress-js"></antcall>
+		<antcall target="compress-css"></antcall>
+	</target>
+
+	<target name="init" description="create static/build/ directory">
+		<mkdir dir="${rootProjectDirName}/static/build/"/>
+	</target>
+
+    <target name="concatenate-js" depends="init" description="Concatenate all js files">
+		<concat destfile="${rootProjectDirName}/static/build/${cssJsFileName}.js">
+			<file file="${rootProjectDirName}/static/frameworks/mustache/mustache.js"/>
+			<file file="${rootProjectDirName}/static/js/op.loader.js"/>
+            <file file="${rootProjectDirName}/static/js/op.search.js"/>
+            <file file="${rootProjectDirName}/static/js/op.map.js"/>
+            <file file="${rootProjectDirName}/static/js/op.osm.geocoder.js"/>
+            <file file="${rootProjectDirName}/static/js/compile-templates.js"/>
+		</concat>
+	</target>
+
+	<target name="compress-js" depends="concatenate-js" description="Compress sm.js to sm-min.js">
+		<apply executable="java" parallel="false">
+			<filelist dir="${rootProjectDirName}/static/build/" files="${cssJsFileName}.js"/>
+			<arg line="-jar"/>
+			<arg path="yui-compressor.jar"/>
+			<srcfile/>
+			<arg line="-o"/>
+			<mapper type="glob" from="*.js" to="${rootProjectDirName}/static/build/*.min.js"/>
+			<targetfile/>
+		</apply>
+	</target>
+
+	<target name="concatenate-css" depends="init" description="Concatenate all css files">
+		<concat destfile="${rootProjectDirName}/static/build/${cssJsFileName}.css">
+			<file file="${rootProjectDirName}/static/frameworks/bootstrap/css/bootstrap.min.css"/>
+			<file file="${rootProjectDirName}/static/css/main.css"/>
+		</concat>
+	</target>
+
+	<target name="compress-css" depends="concatenate-css" description="Compress css">
+		<apply executable="java" parallel="false">
+			<filelist dir="${rootProjectDirName}/static/build/" files="${cssJsFileName}.css"/>
+			<arg line="-jar"/>
+			<arg path="yui-compressor.jar"/>
+			<srcfile/>
+			<arg line="-o"/>
+			<mapper type="glob" from="*.css" to="${rootProjectDirName}/static/build/*.min.css"/>
+			<targetfile/>
+		</apply>
+	</target>
+
+    <property name="src-templates" location="${rootProjectDirName}/static/templates"/>
+    <target name="python-build-scripts">
+        <exec dir="build/" executable="python" failonerror="true">
+            <arg line="build-js-templates.py --ns OP --src ${src-templates} --target ${basedir}/${rootProjectDirName}/static/js/compile-templates.js"/>
+        </exec>
+    </target>
+</project>

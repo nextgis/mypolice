@@ -2,11 +2,54 @@ html, body, #map {
     height: 100%;
     width: 100%;
 }
+
 html {
     font-size: 100%;
 }
+
 body {
     margin: 0;
     overflow: hidden;
     padding: 0;
+}
+
+#addressSearch {
+    z-index: 100;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    text-align: center;
+}
+
+#addressSearch form.form-search {
+    display: inline-block;
+    width: 300px;
+    margin-top: 10px;
+    background-color: #ffffff;
+    padding: 10px;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+    border: 1px solid #888888;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+#addressSearch form.form-search div.title {
+    text-align: center;
+    padding: 5px;
+}
+
+#addressSearch input.address {
+    width: 240px;
+}
+
+#addressSearch input.find {
+    padding: 1px;
+    width: 34px;
+    height: 34px;
+    background: url("../images/op-sprite.png") 0px 0px;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
 }
