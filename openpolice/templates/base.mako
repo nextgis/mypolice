@@ -25,18 +25,22 @@
     <script src="${request.static_url('openpolice:static/frameworks/mustache/mustache.js')}"></script>
     <script src="${request.static_url('openpolice:static/frameworks/cookies/jquery.cookie.js')}"></script>
     <script src="${request.static_url('openpolice:static/js/op.loader.js')}"></script>
+    <script src="${request.static_url('openpolice:static/js/compile-templates.js')}"></script>
     <script src="${request.static_url('openpolice:static/js/op.search.js')}"></script>
     <script src="${request.static_url('openpolice:static/js/op.map.js')}"></script>
     <script src="${request.static_url('openpolice:static/js/op.osm.geocoder.js')}"></script>
+
 </head>
 
 <body>
+<div id="target"></div>
 <div id="addressSearch">
-    <form class="form-search">
+    <form class="form-search search-block">
         <div class="title">Найди своего участкового по адресу</div>
         <input class="address" type="text" placeholder="Например, Москва ул. Пушкина 205"/>
         <input class="find btn" type="button" value="" title="Найти свой адрес"/>
     </form>
+    <div id="searchResults"></div>
 </div>
 <div id="map">
 

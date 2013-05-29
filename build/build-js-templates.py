@@ -11,6 +11,7 @@ parser.add_option("--target", dest="target_file")
 import os
 from os import listdir
 from os.path import isfile, join
+import re
 
 templates_token = ''.join([options.namespace, '.templates'])
 string_templates = ''.join([templates_token, ' = {};\n\r'])
@@ -20,7 +21,7 @@ for f in listdir(options.source_directory):
     path_to_file = join(options.source_directory, f)
     if isfile(path_to_file):
         with open(path_to_file, 'r') as template_file:
-            template_content = template_file.read()
+            template_content = re.sub('\s+', ' ', template_file.read())
             template_name = os.path.splitext(os.path.basename(path_to_file))[0]
             templates.append(''.join(
                 [string_templates, templates_token, "['", template_name, "'] = Mustache.compile('",

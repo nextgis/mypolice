@@ -25,12 +25,6 @@
 
 
         directGeocode: function (geocodingSearch, callback) {
-//            $.ajax({
-//                url: 'http://beta.openstreetmap.ru/api/search?q=' + geocodingSearch,
-//                data: {'q': geocodingSearch},
-//                success: callback
-//            }).success;
-
             $.getJSON('http://beta.openstreetmap.ru/api/search?q=' + geocodingSearch, function (result) {
                 callback(result);
             });

@@ -17,6 +17,7 @@ var OP = {};
 
         init: function () {
             this.setDomOptions();
+            this.bindEvents();
             this.initModules();
         },
 
@@ -30,6 +31,15 @@ var OP = {};
             catch (e) {
                 alert(e);
             }
+        },
+
+
+        bindEvents: function () {
+            OP.view.$document.on('keyup', function (e) {
+                if (e.keyCode === 27) {
+                    OP.view.$document.trigger('/op/escape');
+                }
+            });
         },
 
 

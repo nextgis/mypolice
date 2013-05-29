@@ -10,14 +10,17 @@
 
     OP.map = {};
     $.extend(OP.map, {
+
         defaultExtent: {
             latlng: new L.LatLng(55.742, 37.658),
             zoom: 14
         },
 
+
         init: function () {
             this.buildMap();
             this.buildOsmTileLayer();
+            this.bindEvents();
         },
 
 
@@ -67,6 +70,19 @@
             $.cookie('map.lat', latLng.lat, { expires: 7, path: '/' });
             $.cookie('map.lng', latLng.lng, { expires: 7, path: '/' });
             $.cookie('map.zoom', zoom, { expires: 7, path: '/' });
+        },
+
+
+        bindEvents: function () {
+            OP.view.$document.on('/op/map/setview', function (event, lat, lng, zoom) {
+                if (!zoom) { zoom = 18; }
+                OP.viewmodel.map.setView(new L.LatLng(lat, lng), 18);
+                $('#target').show().delay(1000).fadeOut(1000);
+            });
+
+            OP.viewmodel.map.on('click', function () {
+                OP.view.$document.trigger('/op/search/clearSearchResults');
+            });
         }
     });
 })(jQuery, OP);

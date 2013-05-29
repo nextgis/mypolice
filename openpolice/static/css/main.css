@@ -13,6 +13,23 @@ body {
     padding: 0;
 }
 
+.loader {
+    background: url('../images/loader.gif') center no-repeat;
+}
+
+#target {
+    display: none;
+    background: url('../images/op-sprite.png') -32px -0px;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    left: 50%;
+    margin-left: -15px;
+    margin-top: -15px;
+    top: 50%;
+    z-index: 901;
+}
+
 #addressSearch {
     z-index: 100;
     position: absolute;
@@ -23,7 +40,7 @@ body {
 
 #addressSearch form.form-search {
     display: inline-block;
-    width: 300px;
+    width: 360px;
     margin-top: 10px;
     background-color: #ffffff;
     padding: 10px;
@@ -39,14 +56,42 @@ body {
 }
 
 #addressSearch input.address {
-    width: 240px;
+    width: 300px;
 }
 
 #addressSearch input.find {
     padding: 1px;
-    width: 34px;
-    height: 34px;
+    width: 33px;
+    height: 33px;
     background: url("../images/op-sprite.png") 0px 0px;
+}
+
+#searchResults.loader {
+    height: 50px;
+}
+
+#searchResults ul {
+    display: inline-block;
+    width: 380px;
+    margin: -22px 0 0 0;
+    list-style-type: none;
+    border: 1px solid #888888;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    padding: 0;
+}
+
+#searchResults li {
+    display: block;
+    text-align: left;
+    border-bottom: solid 1px #aaaaaa;
+    background-color: #ffffff;
+    padding: 2px 5px;
+}
+
+#searchResults li.address:hover {
+    background-color: #ffaf4d;
+    cursor: pointer;
 }
 
 #map {
