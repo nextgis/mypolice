@@ -87,6 +87,7 @@
             var context = this,
                 matches,
                 matchesCount = 0;
+            address = this.prepareSearch(address);
             OP.view.$searchResults.empty().addClass('loader');
             OP.view.$document.trigger('/op/osm/geocoder/direct', [address, function (result) {
                 matches = result.matches;
@@ -104,6 +105,11 @@
 
                 context.bindEventsAfterSearch(matchesCount);
             }]);
+        },
+
+
+        prepareSearch: function (address) {
+            return 'Москва, ' + address;
         },
 
 

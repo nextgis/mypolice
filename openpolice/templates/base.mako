@@ -37,8 +37,11 @@
 <div id="addressSearch">
     <form class="form-search search-block">
         <div class="title">Найди своего участкового по адресу</div>
-        <input class="address" type="text" placeholder="Например, Москва ул. Пушкина 205"/>
-        <input class="find btn" type="button" value="" title="Найти свой адрес"/>
+        <div class="search">
+            <label for="address">Москва, </label>
+            <input id="address" class="address" type="text" placeholder="например, Воздвиженка 10"/>
+            <input class="find btn" type="button" value="" title="Найти свой адрес"/>
+        </div>
     </form>
     <div id="searchResults"></div>
 </div>

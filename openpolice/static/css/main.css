@@ -40,7 +40,7 @@ body {
 
 #addressSearch form.form-search {
     display: inline-block;
-    width: 360px;
+    width: 420px;
     margin-top: 10px;
     background-color: #ffffff;
     padding: 10px;
@@ -53,6 +53,11 @@ body {
 #addressSearch form.form-search div.title {
     text-align: center;
     padding: 5px;
+}
+
+#addressSearch div.search label {
+    display: inline-block;
+    color: gray;
 }
 
 #addressSearch input.address {
