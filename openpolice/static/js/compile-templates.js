@@ -1,3 +1,3 @@
 OP.templates = {};
-OP.templates['search-item'] = Mustache.compile('<ul class="search-block"> {{#matches}} <li class="address" data-lat={{lat}} data-lng={{lon}}>{{display_name}}</li> {{/matches}} {{^matches}} <li class="empty-result">Адрес не найден</li> {{/matches}} </ul>');
-
+OP.templates['search-item'] = Mustache.compile('<ul class="search-block"> {{#matches}} <li class="address" data-lat={{lat}} data-lng={{lon}}>{{display_name}}</li> {{/matches}} {{^matches}} <li class="empty-result">Адрес не найден</li> {{/matches}} </ul>');
+OP.templates['house-popup'] = Mustache.compile('<table class="table table-striped"> <tr> <td>Id</td> <td>{{id}}</td> </tr> <tr> <td>Номер</td> <td>{{name}}</td> </tr> <tr> <td>Адрес</td> <td>{{address}}</td> </tr> <tr> <td>Комментарий</td> <td>{{comment}}</td> </tr> </table>');

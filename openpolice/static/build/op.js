@@ -562,9 +562,9 @@ var OP = {};
             try {
                 OP.search.init();
                 OP.map.init();
+                OP.houses.init();
                 OP.osm.geocoder.init();
-            }
-            catch (e) {
+            } catch (e) {
                 alert(e);
             }
         },
@@ -678,6 +678,7 @@ var OP = {};
             var context = this,
                 matches,
                 matchesCount = 0;
+            address = this.prepareSearch(address);
             OP.view.$searchResults.empty().addClass('loader');
             OP.view.$document.trigger('/op/osm/geocoder/direct', [address, function (result) {
                 matches = result.matches;
@@ -695,6 +696,11 @@ var OP = {};
 
                 context.bindEventsAfterSearch(matchesCount);
             }]);
+        },
+
+
+        prepareSearch: function (address) {
+            return 'Москва, ' + address;
         },
 
 
@@ -793,6 +799,14 @@ var OP = {};
 
 
         bindEvents: function () {
+            var context = this;
+
+            OP.viewmodel.map.on('moveend', function () {
+                var map = OP.viewmodel.map;
+                context.setLastExtent(map.getCenter(), map.getZoom());
+                OP.view.$document.trigger('/op/map/moveend');
+            });
+
             OP.view.$document.on('/op/map/setview', function (event, lat, lng, zoom) {
                 if (!zoom) { zoom = 18; }
                 OP.viewmodel.map.setView(new L.LatLng(lat, lng), 18);
@@ -801,6 +815,84 @@ var OP = {};
 
             OP.viewmodel.map.on('click', function () {
                 OP.view.$document.trigger('/op/search/clearSearchResults');
+            });
+        }
+    });
+})(jQuery, OP);(function ($, OP) {
+
+    $.extend(OP.viewmodel, {
+        housesLayer: null,
+        policemen: []
+    });
+
+    $.extend(OP.view, {
+    });
+
+    OP.houses = {};
+    $.extend(OP.houses, {
+        init: function () {
+            this.bindEvents();
+            this.buildHousesLayer();
+        },
+
+
+        bindEvents: function () {
+            var context = this;
+
+            OP.view.$document.on('/op/map/moveend', function () {
+                context.updateHousesLayer();
+            });
+        },
+
+
+        buildHousesLayer: function () {
+            var viewmodel = OP.viewmodel;
+            viewmodel.housesLayer = L.geoJson(null, {
+                onEachFeature: this.bindFeatureEvents
+            }).addTo(viewmodel.map);
+        },
+
+
+        bindFeatureEvents: function (feature, layer) {
+            layer.on('click', function () {
+                this.openPopup();
+            });
+            layer.bindPopup();
+        },
+
+
+        updateHousesLayer: function () {
+            var viewmodel = OP.viewmodel;
+
+            if (!this.validateMap(viewmodel.map)) {
+                return false;
+            }
+
+            viewmodel.housesLayer.clearLayers();
+            viewmodel.policemen = [];
+            this.ajaxGetHouses();
+        },
+
+
+        validateMap: function (map) {
+            return map.getZoom() > 16;
+        },
+
+
+        ajaxGetHouses: function () {
+            var url = document.url_root + 'houses';
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: {
+                    'box' : JSON.stringify(OP.viewmodel.map.getBounds())
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var viewmodel = OP.viewmodel;
+                    viewmodel.housesLayer.addData(data.houses);
+                    viewmodel.policemen = data.policemen;
+                }
             });
         }
     });
@@ -837,5 +929,5 @@ var OP = {};
         }
     });
 })(jQuery, OP);OP.templates = {};
-OP.templates['search-item'] = Mustache.compile('<ul class="search-block"> {{#matches}} <li class="address" data-lat={{lat}} data-lng={{lon}}>{{display_name}}</li> {{/matches}} {{^matches}} <li class="empty-result">Адрес не найден</li> {{/matches}} </ul>');
-
+OP.templates['search-item'] = Mustache.compile('<ul class="search-block"> {{#matches}} <li class="address" data-lat={{lat}} data-lng={{lon}}>{{display_name}}</li> {{/matches}} {{^matches}} <li class="empty-result">Адрес не найден</li> {{/matches}} </ul>');
+OP.templates['house-popup'] = Mustache.compile('<table class="table table-striped"> <tr> <td>Id</td> <td>{{id}}</td> </tr> <tr> <td>Номер</td> <td>{{name}}</td> </tr> <tr> <td>Адрес</td> <td>{{address}}</td> </tr> <tr> <td>Комментарий</td> <td>{{comment}}</td> </tr> </table>');

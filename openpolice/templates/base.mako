@@ -20,6 +20,10 @@
     <link rel="stylesheet" href="${request.static_url('openpolice:static/frameworks/bootstrap/css/bootstrap.css')}"/>
     <link rel="stylesheet" href="${request.static_url('openpolice:static/css/main.css')}"/>
 
+    <script type="text/javascript">
+        document['url_root'] = '${request.route_url('home')}';
+    </script>
+
     ##    <script src="${request.static_url('openpolice:static/build/op.js')}"></script>
 
     <script src="${request.static_url('openpolice:static/frameworks/mustache/mustache.js')}"></script>
@@ -28,6 +32,7 @@
     <script src="${request.static_url('openpolice:static/js/compile-templates.js')}"></script>
     <script src="${request.static_url('openpolice:static/js/op.search.js')}"></script>
     <script src="${request.static_url('openpolice:static/js/op.map.js')}"></script>
+    <script src="${request.static_url('openpolice:static/js/op.houses.js')}"></script>
     <script src="${request.static_url('openpolice:static/js/op.osm.geocoder.js')}"></script>
 
 </head>

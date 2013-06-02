@@ -74,6 +74,14 @@
 
 
         bindEvents: function () {
+            var context = this;
+
+            OP.viewmodel.map.on('moveend', function () {
+                var map = OP.viewmodel.map;
+                context.setLastExtent(map.getCenter(), map.getZoom());
+                OP.view.$document.trigger('/op/map/moveend');
+            });
+
             OP.view.$document.on('/op/map/setview', function (event, lat, lng, zoom) {
                 if (!zoom) { zoom = 18; }
                 OP.viewmodel.map.setView(new L.LatLng(lat, lng), 18);

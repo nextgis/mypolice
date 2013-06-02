@@ -17,6 +17,7 @@ requires = [
     
     'psycopg2',
     'geoalchemy',
+    'geojson',
     'shapely',
     ]
 

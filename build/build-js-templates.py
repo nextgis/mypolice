@@ -14,7 +14,7 @@ from os.path import isfile, join
 import re
 
 templates_token = ''.join([options.namespace, '.templates'])
-string_templates = ''.join([templates_token, ' = {};\n\r'])
+declaration_templates = ''.join([templates_token, ' = {};'])
 templates = []
 
 for f in listdir(options.source_directory):
@@ -24,11 +24,11 @@ for f in listdir(options.source_directory):
             template_content = re.sub('\s+', ' ', template_file.read())
             template_name = os.path.splitext(os.path.basename(path_to_file))[0]
             templates.append(''.join(
-                [string_templates, templates_token, "['", template_name, "'] = Mustache.compile('",
-                 template_content, "');\n\r"]
+                [templates_token, "['", template_name, "'] = Mustache.compile('",
+                 template_content, "');"]
             ))
 
-string_templates = ''.join(string_templates.join(templates))
+string_templates = '\n'.join([declaration_templates, '\n'.join(templates)])
 js_file_templates = open(options.target_file, 'w+')
 js_file_templates.write(string_templates)
 js_file_templates.close()

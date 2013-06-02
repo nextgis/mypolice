@@ -20,6 +20,7 @@
 			<file file="${rootProjectDirName}/static/js/op.loader.js"/>
             <file file="${rootProjectDirName}/static/js/op.search.js"/>
             <file file="${rootProjectDirName}/static/js/op.map.js"/>
+            <file file="${rootProjectDirName}/static/js/op.houses.js"/>
             <file file="${rootProjectDirName}/static/js/op.osm.geocoder.js"/>
             <file file="${rootProjectDirName}/static/js/compile-templates.js"/>
 		</concat>

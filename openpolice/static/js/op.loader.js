@@ -26,9 +26,9 @@ var OP = {};
             try {
                 OP.search.init();
                 OP.map.init();
+                OP.houses.init();
                 OP.osm.geocoder.init();
-            }
-            catch (e) {
+            } catch (e) {
                 alert(e);
             }
         },
