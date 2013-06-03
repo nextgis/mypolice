@@ -34,10 +34,14 @@
 
 
         bindFeatureEvents: function (feature, layer) {
+            var policeman = OP.viewmodel.policemen[feature.properties.pm_id];
+            layer.bindPopup(OP.templates['house-popup']({
+                policeman: policeman
+            }));
+
             layer.on('click', function () {
                 this.openPopup();
             });
-            layer.bindPopup();
         },
 
 
@@ -70,8 +74,8 @@
                 dataType: 'json',
                 success: function (data) {
                     var viewmodel = OP.viewmodel;
-                    viewmodel.housesLayer.addData(data.houses);
                     viewmodel.policemen = data.policemen;
+                    viewmodel.housesLayer.addData(data.houses);
                 }
             });
         }

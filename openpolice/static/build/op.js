@@ -854,10 +854,14 @@ var OP = {};
 
 
         bindFeatureEvents: function (feature, layer) {
+            var policeman = OP.viewmodel.policemen[feature.properties.pm_id];
+            layer.bindPopup(OP.templates['house-popup']({
+                policeman: policeman
+            }));
+
             layer.on('click', function () {
                 this.openPopup();
             });
-            layer.bindPopup();
         },
 
 
@@ -890,8 +894,8 @@ var OP = {};
                 dataType: 'json',
                 success: function (data) {
                     var viewmodel = OP.viewmodel;
-                    viewmodel.housesLayer.addData(data.houses);
                     viewmodel.policemen = data.policemen;
+                    viewmodel.housesLayer.addData(data.houses);
                 }
             });
         }
@@ -930,4 +934,4 @@ var OP = {};
     });
 })(jQuery, OP);OP.templates = {};
 OP.templates['search-item'] = Mustache.compile('<ul class="search-block"> {{#matches}} <li class="address" data-lat={{lat}} data-lng={{lon}}>{{display_name}}</li> {{/matches}} {{^matches}} <li class="empty-result">Адрес не найден</li> {{/matches}} </ul>');
-OP.templates['house-popup'] = Mustache.compile('<table class="table table-striped"> <tr> <td>Id</td> <td>{{id}}</td> </tr> <tr> <td>Номер</td> <td>{{name}}</td> </tr> <tr> <td>Адрес</td> <td>{{address}}</td> </tr> <tr> <td>Комментарий</td> <td>{{comment}}</td> </tr> </table>');
+OP.templates['house-popup'] = Mustache.compile('<table id="popup" class="table table-striped"> <tr> <td>ФИО</td> <td>{{policeman.name}}</td> </tr> <tr> <td>Номер</td> <td>{{policeman.type}}</td> </tr> <tr> <td>Адрес</td> <td>{{policeman.rank}}</td> </tr> <tr> <td>Комментарий</td> <td>{{policeman.phone}}</td> </tr> <tr> <td>Ссылка</td> <td><a href="{{policeman.url}}" target="_blank">112.ru</a></td> </tr> </table>');
