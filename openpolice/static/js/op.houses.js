@@ -28,7 +28,8 @@
         buildHousesLayer: function () {
             var viewmodel = OP.viewmodel;
             viewmodel.housesLayer = L.geoJson(null, {
-                onEachFeature: this.bindFeatureEvents
+                onEachFeature: this.bindFeatureEvents,
+                style: this.setStyle
             }).addTo(viewmodel.map);
         },
 
@@ -42,6 +43,15 @@
             layer.on('click', function () {
                 this.openPopup();
             });
+        },
+
+
+        setStyle: function (feature) {
+            return {
+                color: OP.viewmodel.policemen[feature.properties.pm_id].color,
+                opacity: 1.0,
+                weight: 3
+            };
         },
 
 
@@ -64,7 +74,8 @@
 
 
         ajaxGetHouses: function () {
-            var url = document.url_root + 'houses';
+            var context = this,
+                url = document.url_root + 'houses';
             $.ajax({
                 type: "GET",
                 url: url,
@@ -75,9 +86,27 @@
                 success: function (data) {
                     var viewmodel = OP.viewmodel;
                     viewmodel.policemen = data.policemen;
+                    context.setPolicemenColors();
                     viewmodel.housesLayer.addData(data.houses);
                 }
             });
+        },
+
+
+        setPolicemenColors: function () {
+            var policemen = OP.viewmodel.policemen,
+                policeman;
+
+            for (policeman in policemen) {
+                if (policemen.hasOwnProperty(policeman)) {
+                    policemen[policeman]['color'] = this.getRandomColor();
+                }
+            }
+        },
+
+
+        getRandomColor: function () {
+            return '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1,6);
         }
     });
 })(jQuery, OP);
