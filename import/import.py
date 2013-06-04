@@ -106,7 +106,8 @@ con = psycopg2.connect(conn)
 cur = con.cursor()
 
 sql_policemen = "INSERT INTO policemen(id, name, type, rank, phone, url) VALUES "
-sql_houses = "INSERT INTO houses(osm_id, building, street, suburb, house_num, name, address, geo, policeman_id) VALUES "
+# sql_houses = "INSERT INTO houses(osm_id, building, street, suburb, house_num, name, address, geo, policeman_id) VALUES "
+sql_houses = "INSERT INTO houses(osm_id, house_num, address, geo, policeman_id) VALUES "
 policeman_id = 0
 count_houses = 0
 for k, policeman in policemen.iteritems():
@@ -124,11 +125,11 @@ for k, policeman in policemen.iteritems():
         for house in houses:
             sql_houses += get_values([
                 check_null(house['osm_id']),
-                check_null(house['building']),
-                check_null(house['street']),
-                check_null(house['suburb']),
+                # check_null(house['building']),
+                # check_null(house['street']),
+                # check_null(house['suburb']),
                 check_null(house['house_num']),
-                check_null(house['name']),
+                # check_null(house['name']),
                 check_null(house['address']),
                 "ST_GeomFromText('POLYGON((" + ','.join(
                     '{0} {1}'.format(point[0], point[1]) for point in house['geo']) + "))', 4326)",
