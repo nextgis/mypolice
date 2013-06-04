@@ -113,7 +113,44 @@ body {
     width: 100%;
 }
 
+#map div.leaflet-popup {
+    z-index: 150;
+}
+
 #popup td {
     line-height: 18px;
     padding: 0 5px;
+}
+
+#rightPanel {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+#rightPanel a {
+    opacity: 0.5;
+    cursor: pointer;
+    border: none;
+}
+
+#rightPanel a.logo-nextgis {
+    display: inline-block;
+    width: 160px;
+    height: 35px;
+    background: url("../images/op-sprite.png") 0px -80px;
+}
+
+#rightPanel a.help {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background: url("../images/op-sprite.png") -160px -80px;
+    margin-left: 10px;
+}
+
+#rightPanel a.logo-nextgis:hover,
+#rightPanel a.help:hover {
+    opacity: 1.0;
 }

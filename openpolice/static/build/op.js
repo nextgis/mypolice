@@ -614,6 +614,10 @@ var OP = {};
                 context.manageSearchInputs(e, this.value);
             });
 
+            $("#addressSearchForm").submit(function (e) {
+                e.preventDefault();
+            });
+
             OP.view.$document.on('/op/search/clearSearchResults', function () {
                 context.clearSearchResults();
             });
@@ -626,12 +630,6 @@ var OP = {};
 
         searchInputHandler: [],
         manageSearchInputs: function (event, searchValue) {
-            if (event.keyCode === 27) {
-                this.clearSearchResults();
-                this.searchInputHandler = [];
-                this.isSearchResultsExist = false;
-                return false;
-            }
             var context = this;
             this.searchInputHandler.push([event, searchValue]);
             setTimeout(function () {
@@ -648,10 +646,6 @@ var OP = {};
 
         isSearchResultsExist: false,
         searchKeyHandler: function (event, searchValue) {
-            var keyCode = event.keyCode;
-            if (keyCode === 13) {
-                event.preventDefault();
-            }
             if (this.validateSearch(searchValue)) {
                 this.search(searchValue);
             } else if (this.isSearchResultsExist) {
@@ -690,7 +684,7 @@ var OP = {};
                 }
                 OP.view.$searchResults.removeClass('loader');
                 context.isSearchResultsExist = true;
-                OP.view.$searchResults.append(OP.templates['search-item']({
+                OP.view.$searchResults.empty().append(OP.templates['search-item']({
                     matches: matches
                 }));
 
@@ -738,7 +732,7 @@ var OP = {};
 
         defaultExtent: {
             latlng: new L.LatLng(55.742, 37.658),
-            zoom: 14
+            zoom: 17
         },
 
 
@@ -754,7 +748,7 @@ var OP = {};
                 lastExtent = this.getLastExtent();
 
             OP.view.$map = $('#map');
-            viewmodel.map = new L.Map('map');
+            viewmodel.map = new L.Map('map', {'minZoom': 17});
 
             L.control.scale().addTo(viewmodel.map);
 
@@ -833,6 +827,7 @@ var OP = {};
         init: function () {
             this.bindEvents();
             this.buildHousesLayer();
+            this.updateHousesLayer();
         },
 
 
@@ -855,19 +850,26 @@ var OP = {};
 
 
         bindFeatureEvents: function (feature, layer) {
-            var policeman = OP.viewmodel.policemen[feature.properties.pm_id];
-            layer.bindPopup(OP.templates['house-popup']({
-                policeman: policeman
-            }));
-
-            layer.on('click', function () {
-                this.openPopup();
+            layer.on('click', function (event) {
+                var map = OP.viewmodel.map,
+                    latlng = event.latlng,
+                    policeman = OP.viewmodel.policemen[feature.properties.pm_id],
+                    html = OP.templates['house-popup']({
+                        policeman: policeman,
+                        address: feature.properties.address
+                    });
+                map.panTo(latlng);
+                map.openPopup(L.popup().setLatLng(latlng).setContent(html));
             });
         },
 
 
         setStyle: function (feature) {
-            return OP.viewmodel.policemen[feature.pm_id.color];
+            return {
+                color: OP.viewmodel.policemen[feature.properties.pm_id].color,
+                opacity: 1.0,
+                weight: 3
+            };
         },
 
 
@@ -878,6 +880,7 @@ var OP = {};
                 return false;
             }
 
+            OP.view.$searchResults.empty().addClass('loader');
             viewmodel.housesLayer.clearLayers();
             viewmodel.policemen = [];
             this.ajaxGetHouses();
@@ -904,6 +907,7 @@ var OP = {};
                     viewmodel.policemen = data.policemen;
                     context.setPolicemenColors();
                     viewmodel.housesLayer.addData(data.houses);
+                    OP.view.$searchResults.empty().removeClass('loader');
                 }
             });
         },
@@ -922,7 +926,7 @@ var OP = {};
 
 
         getRandomColor: function () {
-            return '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1,6);
+            return '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6);
         }
     });
 })(jQuery, OP);(function ($, OP) {
@@ -959,4 +963,4 @@ var OP = {};
     });
 })(jQuery, OP);OP.templates = {};
 OP.templates['search-item'] = Mustache.compile('<ul class="search-block"> {{#matches}} <li class="address" data-lat={{lat}} data-lng={{lon}}>{{display_name}}</li> {{/matches}} {{^matches}} <li class="empty-result">Адрес не найден</li> {{/matches}} </ul>');
-OP.templates['house-popup'] = Mustache.compile('<table id="popup" class="table table-striped"> <tr> <td>ФИО</td> <td>{{policeman.name}}</td> </tr> <tr> <td>Номер</td> <td>{{policeman.type}}</td> </tr> <tr> <td>Адрес</td> <td>{{policeman.rank}}</td> </tr> <tr> <td>Комментарий</td> <td>{{policeman.phone}}</td> </tr> <tr> <td>Ссылка</td> <td><a href="{{policeman.url}}" target="_blank">112.ru</a></td> </tr> </table>');
+OP.templates['house-popup'] = Mustache.compile('<table id="popup" class="table table-striped"> <tr> <td>ФИО</td> <td>{{policeman.name}}</td> </tr> <tr> <td>Должность</td> <td>{{policeman.type}}</td> </tr> <tr> <td>Звание</td> <td>{{policeman.rank}}</td> </tr> <tr> <td>Телефон</td> <td>{{policeman.phone}}</td> </tr> <tr> <td>Ссылка</td> <td><a title="Страница полицейского на 112.ru" href="{{policeman.url}}" target="_blank">112.ru</a></td> </tr> <tr> <td>Адрес</td> <td>{{address}}</td> </tr> </table>');

@@ -13,7 +13,7 @@
 
         defaultExtent: {
             latlng: new L.LatLng(55.742, 37.658),
-            zoom: 14
+            zoom: 17
         },
 
 
@@ -29,7 +29,7 @@
                 lastExtent = this.getLastExtent();
 
             OP.view.$map = $('#map');
-            viewmodel.map = new L.Map('map');
+            viewmodel.map = new L.Map('map', {'minZoom': 17});
 
             L.control.scale().addTo(viewmodel.map);
 

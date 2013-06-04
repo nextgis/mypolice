@@ -23,6 +23,10 @@
                 context.manageSearchInputs(e, this.value);
             });
 
+            $("#addressSearchForm").submit(function (e) {
+                e.preventDefault();
+            });
+
             OP.view.$document.on('/op/search/clearSearchResults', function () {
                 context.clearSearchResults();
             });
@@ -35,12 +39,6 @@
 
         searchInputHandler: [],
         manageSearchInputs: function (event, searchValue) {
-            if (event.keyCode === 27) {
-                this.clearSearchResults();
-                this.searchInputHandler = [];
-                this.isSearchResultsExist = false;
-                return false;
-            }
             var context = this;
             this.searchInputHandler.push([event, searchValue]);
             setTimeout(function () {
@@ -57,10 +55,6 @@
 
         isSearchResultsExist: false,
         searchKeyHandler: function (event, searchValue) {
-            var keyCode = event.keyCode;
-            if (keyCode === 13) {
-                event.preventDefault();
-            }
             if (this.validateSearch(searchValue)) {
                 this.search(searchValue);
             } else if (this.isSearchResultsExist) {
@@ -99,7 +93,7 @@
                 }
                 OP.view.$searchResults.removeClass('loader');
                 context.isSearchResultsExist = true;
-                OP.view.$searchResults.append(OP.templates['search-item']({
+                OP.view.$searchResults.empty().append(OP.templates['search-item']({
                     matches: matches
                 }));
 

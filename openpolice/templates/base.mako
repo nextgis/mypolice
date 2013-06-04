@@ -39,8 +39,9 @@
 
 <body>
 <div id="target"></div>
+<div id="map"></div>
 <div id="addressSearch">
-    <form class="form-search search-block">
+    <form id="addressSearchForm" class="form-search search-block" >
         <div class="title">Найди своего участкового по адресу</div>
         <div class="search">
             <label for="address">Москва, </label>
@@ -50,8 +51,9 @@
     </form>
     <div id="searchResults"></div>
 </div>
-<div id="map">
-
+<div id="rightPanel">
+    <a class="logo-nextgis" title="Перейти к сайту разработчика NextGIS" href="http://nextgis.ru/"></a>
+    <a class="help" title="О проекте" href="#"></a>
 </div>
 </body>
 

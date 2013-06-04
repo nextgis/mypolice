@@ -13,6 +13,7 @@
         init: function () {
             this.bindEvents();
             this.buildHousesLayer();
+            this.updateHousesLayer();
         },
 
 
@@ -35,13 +36,16 @@
 
 
         bindFeatureEvents: function (feature, layer) {
-            var policeman = OP.viewmodel.policemen[feature.properties.pm_id];
-            layer.bindPopup(OP.templates['house-popup']({
-                policeman: policeman
-            }));
-
-            layer.on('click', function () {
-                this.openPopup();
+            layer.on('click', function (event) {
+                var map = OP.viewmodel.map,
+                    latlng = event.latlng,
+                    policeman = OP.viewmodel.policemen[feature.properties.pm_id],
+                    html = OP.templates['house-popup']({
+                        policeman: policeman,
+                        address: feature.properties.address
+                    });
+                map.panTo(latlng);
+                map.openPopup(L.popup().setLatLng(latlng).setContent(html));
             });
         },
 
@@ -62,6 +66,7 @@
                 return false;
             }
 
+            OP.view.$searchResults.empty().addClass('loader');
             viewmodel.housesLayer.clearLayers();
             viewmodel.policemen = [];
             this.ajaxGetHouses();
@@ -88,6 +93,7 @@
                     viewmodel.policemen = data.policemen;
                     context.setPolicemenColors();
                     viewmodel.housesLayer.addData(data.houses);
+                    OP.view.$searchResults.empty().removeClass('loader');
                 }
             });
         },
@@ -106,7 +112,7 @@
 
 
         getRandomColor: function () {
-            return '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1,6);
+            return '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6);
         }
     });
 })(jQuery, OP);
