@@ -1,7 +1,7 @@
 (function ($, OP) {
 
     $.extend(OP.viewmodel, {
-        searcherCollapsed: true
+        searcherCollapsed: false
     });
 
     $.extend(OP.view, {

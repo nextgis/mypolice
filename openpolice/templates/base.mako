@@ -38,12 +38,12 @@
 
 </head>
 
-<body class='searcher-collapsed'>
+<body class=''>
 <div id="target"></div>
 <div id="map"></div>
 <div id="legend">
     <span class="icon-collapse"></span>
-    <div class="title"><span>Условные знаки</span></div>
+    <div class="title"><span>Участковые</span></div>
     <div class="symbols"></div>
 </div>
 <div id="addressSearch">
