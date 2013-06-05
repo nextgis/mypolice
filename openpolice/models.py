@@ -2,7 +2,8 @@ from sqlalchemy import (
     Column,
     Integer,
     Text,
-    ForeignKey
+    ForeignKey,
+    String
 )
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -34,6 +35,7 @@ class Policeman(Base):
     rank = Column(Text, index=True)
     phone = Column(Text, index=True)
     url = Column(Text, index=True)
+    color = Column(String(7), index=True)
 
 
 class House(Base):

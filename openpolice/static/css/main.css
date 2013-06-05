@@ -122,6 +122,8 @@ body {
 
 #rightPanel a {
     opacity: 0.5;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
     cursor: pointer;
     border: none;
 }
@@ -144,4 +146,6 @@ body {
 #rightPanel a.logo-nextgis:hover,
 #rightPanel a.help:hover {
     opacity: 1.0;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: alpha(opacity=100);
 }

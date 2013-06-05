@@ -91,28 +91,10 @@
                 success: function (data) {
                     var viewmodel = OP.viewmodel;
                     viewmodel.policemen = data.policemen;
-                    context.setPolicemenColors();
                     viewmodel.housesLayer.addData(data.houses);
                     OP.view.$searchResults.empty().removeClass('loader');
                 }
             });
-        },
-
-
-        setPolicemenColors: function () {
-            var policemen = OP.viewmodel.policemen,
-                policeman;
-
-            for (policeman in policemen) {
-                if (policemen.hasOwnProperty(policeman)) {
-                    policemen[policeman]['color'] = this.getRandomColor();
-                }
-            }
-        },
-
-
-        getRandomColor: function () {
-            return '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6);
         }
     });
 })(jQuery, OP);

@@ -41,7 +41,8 @@ def get_houses(context, request):
                 'type': policeman.type,
                 'rank': policeman.rank,
                 'phone': policeman.phone,
-                'url': policeman.url
+                'url': policeman.url,
+                'color': policeman.color
             }
 
     result = {

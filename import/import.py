@@ -97,6 +97,15 @@ def check_null(arg):
 # ----------------------------------------
 # Import to postgresql
 # ----------------------------------------
+
+import random
+
+
+def get_random_color():
+    r = lambda: random.randint(0, 255)
+    return '#%02X%02X%02X' % (r(), r(), r())
+
+
 import psycopg2
 
 print 'Starting import data into Postgresql database...\n\r'
@@ -105,7 +114,7 @@ conn = "dbname='{0}' host='{1}' user='{2}' password='{3}'". \
 con = psycopg2.connect(conn)
 cur = con.cursor()
 
-sql_policemen = "INSERT INTO policemen(id, name, type, rank, phone, url) VALUES "
+sql_policemen = "INSERT INTO policemen(id, name, type, rank, phone, url, color) VALUES "
 # sql_houses = "INSERT INTO houses(osm_id, building, street, suburb, house_num, name, address, geo, policeman_id) VALUES "
 sql_houses = "INSERT INTO houses(osm_id, house_num, address, geo, policeman_id) VALUES "
 policeman_id = 0
@@ -118,6 +127,7 @@ for k, policeman in policemen.iteritems():
         check_null(policeman['rank']),
         check_null(policeman['phone']),
         check_null(policeman['url']),
+        check_null(get_random_color())
     ]) + ","
 
     if policeman['id'] in houses_by_policeman:

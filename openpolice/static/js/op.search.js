@@ -27,6 +27,10 @@
                 e.preventDefault();
             });
 
+            $("#addressSearchForm input.find").off('click').on('click', function (e) {
+                context.search($('#address').val(), 'searchByEnter');
+            });
+
             OP.view.$document.on('/op/search/clearSearchResults', function () {
                 context.clearSearchResults();
             });
