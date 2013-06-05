@@ -1,14 +1,2 @@
-openpolice README
-==================
-
-Getting Started
----------------
-
-- cd <directory containing this file>
-
-- $venv/bin/python setup.py develop
-
-- $venv/bin/initialize_openpolice_db development.ini
-
-- $venv/bin/pserve development.ini
-
+Open police Web application for http://openpolice.ru/
+Detailed description (RUS) available is here - http://gis-lab.info/qa/openpolice.html
