@@ -93,6 +93,7 @@
                     viewmodel.policemen = data.policemen;
                     viewmodel.housesLayer.addData(data.houses);
                     OP.view.$searchResults.empty().removeClass('loader');
+                    OP.view.$document.trigger('/op/houses/updated');
                 }
             });
         }

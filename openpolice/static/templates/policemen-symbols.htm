@@ -1,0 +1,14 @@
+<ul>
+    {{#policemen}}
+    <li>
+        <div style="border-color: {{color}}"><span style="background-color: {{color}}"></span></div>
+        {{name}}
+    </li>
+    {{/policemen}}
+
+    {{^policemen}}
+    <li>
+        Здесь полицейские не найдены
+    </li>
+    {{/policemen}}
+</ul>

@@ -534,6 +534,100 @@
   };
 
 }));
+/*!
+ * jQuery Cookie Plugin v1.3.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals.
+		factory(jQuery);
+	}
+}(function ($) {
+
+	var pluses = /\+/g;
+
+	function raw(s) {
+		return s;
+	}
+
+	function decoded(s) {
+		return decodeURIComponent(s.replace(pluses, ' '));
+	}
+
+	function converted(s) {
+		if (s.indexOf('"') === 0) {
+			// This is a quoted cookie as according to RFC2068, unescape
+			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+		}
+		try {
+			return config.json ? JSON.parse(s) : s;
+		} catch(er) {}
+	}
+
+	var config = $.cookie = function (key, value, options) {
+
+		// write
+		if (value !== undefined) {
+			options = $.extend({}, config.defaults, options);
+
+			if (typeof options.expires === 'number') {
+				var days = options.expires, t = options.expires = new Date();
+				t.setDate(t.getDate() + days);
+			}
+
+			value = config.json ? JSON.stringify(value) : String(value);
+
+			return (document.cookie = [
+				config.raw ? key : encodeURIComponent(key),
+				'=',
+				config.raw ? value : encodeURIComponent(value),
+				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+				options.path    ? '; path=' + options.path : '',
+				options.domain  ? '; domain=' + options.domain : '',
+				options.secure  ? '; secure' : ''
+			].join(''));
+		}
+
+		// read
+		var decode = config.raw ? raw : decoded;
+		var cookies = document.cookie.split('; ');
+		var result = key ? undefined : {};
+		for (var i = 0, l = cookies.length; i < l; i++) {
+			var parts = cookies[i].split('=');
+			var name = decode(parts.shift());
+			var cookie = decode(parts.join('='));
+
+			if (key && key === name) {
+				result = converted(cookie);
+				break;
+			}
+
+			if (!key) {
+				result[name] = converted(cookie);
+			}
+		}
+
+		return result;
+	};
+
+	config.defaults = {};
+
+	$.removeCookie = function (key, options) {
+		if ($.cookie(key) !== undefined) {
+			$.cookie(key, '', $.extend(options, { expires: -1 }));
+			return true;
+		}
+		return false;
+	};
+
+}));
 var OP = {};
 
 (function ($, OP) {
@@ -544,7 +638,8 @@ var OP = {};
         version: 0.1
     });
     $.extend(OP.view, {
-        $document: null
+        $document: null,
+        $body: null
     });
 
     OP.loader = {};
@@ -563,6 +658,7 @@ var OP = {};
                 OP.search.init();
                 OP.map.init();
                 OP.houses.init();
+                OP.houses.legend.init();
                 OP.osm.geocoder.init();
             } catch (e) {
                 alert(e);
@@ -581,6 +677,7 @@ var OP = {};
 
         setDomOptions: function () {
             OP.view.$document = $(document);
+            OP.view.$body = $('body');
         }
     });
 
@@ -616,6 +713,10 @@ var OP = {};
 
             $("#addressSearchForm").submit(function (e) {
                 e.preventDefault();
+            });
+
+            $("#addressSearchForm input.find").off('click').on('click', function (e) {
+                context.search($('#address').val(), 'searchByEnter');
             });
 
             OP.view.$document.on('/op/search/clearSearchResults', function () {
@@ -939,8 +1040,72 @@ var OP = {};
                     viewmodel.policemen = data.policemen;
                     viewmodel.housesLayer.addData(data.houses);
                     OP.view.$searchResults.empty().removeClass('loader');
+                    OP.view.$document.trigger('/op/houses/updated');
                 }
             });
+        }
+    });
+})(jQuery, OP);(function ($, OP) {
+
+    $.extend(OP.viewmodel, {
+        searcherCollapsed: true
+    });
+
+    $.extend(OP.view, {
+        $legend: null,
+        $symbols: null
+    });
+
+    OP.houses.legend = {};
+    $.extend(OP.houses.legend, {
+
+        init: function () {
+            this.setDomOptions();
+            this.bindEvents();
+        },
+
+
+        setDomOptions: function () {
+            var view = OP.view;
+
+            view.$legend = $('#legend');
+            view.$symbols = view.$legend.find('div.symbols');
+        },
+
+
+        bindEvents: function () {
+            var context = this;
+
+            OP.view.$legend.find('span.icon-collapse, div.title').off('click').on('click', function () {
+                OP.viewmodel.searcherCollapsed = !OP.viewmodel.searcherCollapsed;
+                OP.view.$body.toggleClass('searcher-collapsed', OP.viewmodel.searcherCollapsed);
+            });
+
+            OP.view.$document.on('/op/houses/updated', function () {
+                context.buildLegend();
+            });
+        },
+
+
+        buildLegend: function () {
+            var $symbols = OP.view.$symbols,
+                policemen = OP.viewmodel.policemen,
+                policemenArray = [],
+                policeman;
+
+            for (policeman in policemen) {
+                if (policemen.hasOwnProperty(policeman)) {
+                    policemenArray.push({
+                        name: policemen[policeman].name,
+                        color: policemen[policeman].color
+                    });
+                }
+            }
+
+            $symbols.empty().append(OP.templates['policemen-symbols']({
+                policemen: policemenArray
+            }));
+
         }
     });
 })(jQuery, OP);(function ($, OP) {
@@ -977,4 +1142,5 @@ var OP = {};
     });
 })(jQuery, OP);OP.templates = {};
 OP.templates['search-item'] = Mustache.compile('<ul class="search-block"> {{#matches}} <li class="address" data-lat={{lat}} data-lng={{lon}}>{{display_name}}</li> {{/matches}} {{^matches}} <li class="empty-result">Адрес не найден</li> {{/matches}} </ul>');
+OP.templates['policemen-symbols'] = Mustache.compile('<ul> {{#policemen}} <li> <div style="border-color: {{color}}"><span style="background-color: {{color}}"></span></div> {{name}} </li> {{/policemen}} {{^policemen}} <li> Здесь полицейские не найдены </li> {{/policemen}} </ul>');
 OP.templates['house-popup'] = Mustache.compile('<table id="popup" class="table table-striped"> <tr> <td>ФИО</td> <td>{{policeman.name}}</td> </tr> <tr> <td>Должность</td> <td>{{policeman.type}}</td> </tr> <tr> <td>Звание</td> <td>{{policeman.rank}}</td> </tr> <tr> <td>Телефон</td> <td>{{policeman.phone}}</td> </tr> <tr> <td>Ссылка</td> <td><a title="Страница полицейского на 112.ru" href="{{policeman.url}}" target="_blank">112.ru</a></td> </tr> <tr> <td>Адрес</td> <td>{{address}}</td> </tr> </table>');

@@ -17,10 +17,12 @@
     <target name="concatenate-js" depends="init" description="Concatenate all js files">
 		<concat destfile="${rootProjectDirName}/static/build/${cssJsFileName}.js">
 			<file file="${rootProjectDirName}/static/frameworks/mustache/mustache.js"/>
+            <file file="${rootProjectDirName}/static/frameworks/cookies/jquery.cookie.js"/>
 			<file file="${rootProjectDirName}/static/js/op.loader.js"/>
             <file file="${rootProjectDirName}/static/js/op.search.js"/>
             <file file="${rootProjectDirName}/static/js/op.map.js"/>
             <file file="${rootProjectDirName}/static/js/op.houses.js"/>
+            <file file="${rootProjectDirName}/static/js/op.houses.legend.js"/>
             <file file="${rootProjectDirName}/static/js/op.osm.geocoder.js"/>
             <file file="${rootProjectDirName}/static/js/compile-templates.js"/>
 		</concat>

@@ -15,31 +15,37 @@
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
 
-    ##    <link rel="stylesheet" href="${request.static_url('openpolice:static/build/op.css')}" />
-
-    <link rel="stylesheet" href="${request.static_url('openpolice:static/frameworks/bootstrap/css/bootstrap.css')}"/>
-    <link rel="stylesheet" href="${request.static_url('openpolice:static/css/main.css')}"/>
+        <link rel="stylesheet" href="${request.static_url('openpolice:static/build/op.min.css')}" />
+##
+##    <link rel="stylesheet" href="${request.static_url('openpolice:static/frameworks/bootstrap/css/bootstrap.css')}"/>
+##    <link rel="stylesheet" href="${request.static_url('openpolice:static/css/main.css')}"/>
 
     <script type="text/javascript">
         document['url_root'] = '${request.route_url('home')}';
     </script>
 
-    ##    <script src="${request.static_url('openpolice:static/build/op.js')}"></script>
+        <script src="${request.static_url('openpolice:static/build/op.min.js')}"></script>
 
-    <script src="${request.static_url('openpolice:static/frameworks/mustache/mustache.js')}"></script>
-    <script src="${request.static_url('openpolice:static/frameworks/cookies/jquery.cookie.js')}"></script>
-    <script src="${request.static_url('openpolice:static/js/op.loader.js')}"></script>
-    <script src="${request.static_url('openpolice:static/js/compile-templates.js')}"></script>
-    <script src="${request.static_url('openpolice:static/js/op.search.js')}"></script>
-    <script src="${request.static_url('openpolice:static/js/op.map.js')}"></script>
-    <script src="${request.static_url('openpolice:static/js/op.houses.js')}"></script>
-    <script src="${request.static_url('openpolice:static/js/op.osm.geocoder.js')}"></script>
+##    <script src="${request.static_url('openpolice:static/frameworks/mustache/mustache.js')}"></script>
+##    <script src="${request.static_url('openpolice:static/frameworks/cookies/jquery.cookie.js')}"></script>
+##    <script src="${request.static_url('openpolice:static/js/op.loader.js')}"></script>
+##    <script src="${request.static_url('openpolice:static/js/compile-templates.js')}"></script>
+##    <script src="${request.static_url('openpolice:static/js/op.search.js')}"></script>
+##    <script src="${request.static_url('openpolice:static/js/op.map.js')}"></script>
+##    <script src="${request.static_url('openpolice:static/js/op.houses.js')}"></script>
+##    <script src="${request.static_url('openpolice:static/js/op.houses.legend.js')}"></script>
+##    <script src="${request.static_url('openpolice:static/js/op.osm.geocoder.js')}"></script>
 
 </head>
 
-<body>
+<body class='searcher-collapsed'>
 <div id="target"></div>
 <div id="map"></div>
+<div id="legend">
+    <span class="icon-collapse"></span>
+    <div class="title"><span>Условные знаки</span></div>
+    <div class="symbols"></div>
+</div>
 <div id="addressSearch">
     <form id="addressSearchForm" class="form-search search-block" >
         <div class="title">Найди своего участкового по адресу</div>
@@ -53,7 +59,7 @@
 </div>
 <div id="rightPanel">
     <a class="logo-nextgis" title="Перейти к сайту разработчика NextGIS" href="http://nextgis.ru/"></a>
-    <a class="help" title="О проекте" href="#"></a>
+    <a class="help" title="О проекте" href="http://gis-lab.info/qa/openpolice.html"></a>
 </div>
 </body>
 

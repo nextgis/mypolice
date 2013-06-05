@@ -8,7 +8,8 @@ var OP = {};
         version: 0.1
     });
     $.extend(OP.view, {
-        $document: null
+        $document: null,
+        $body: null
     });
 
     OP.loader = {};
@@ -27,6 +28,7 @@ var OP = {};
                 OP.search.init();
                 OP.map.init();
                 OP.houses.init();
+                OP.houses.legend.init();
                 OP.osm.geocoder.init();
             } catch (e) {
                 alert(e);
@@ -45,6 +47,7 @@ var OP = {};
 
         setDomOptions: function () {
             OP.view.$document = $(document);
+            OP.view.$body = $('body');
         }
     });
 
