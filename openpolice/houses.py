@@ -46,8 +46,8 @@ def get_houses(context, request):
             }
 
     result = {
-        'houses': json.loads(dumps(FeatureCollection(houses))),
+        'houses': FeatureCollection(houses),
         'policemen': policemen
     }
 
-    return Response(json.dumps(result))
+    return Response(dumps(result))

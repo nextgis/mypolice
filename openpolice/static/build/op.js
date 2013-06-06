@@ -1014,7 +1014,6 @@ var OP = {};
             }
 
             OP.view.$searchResults.empty().addClass('loader');
-            viewmodel.housesLayer.clearLayers();
             viewmodel.policemen = [];
             this.ajaxGetHouses();
         },
@@ -1038,6 +1037,7 @@ var OP = {};
                 success: function (data) {
                     var viewmodel = OP.viewmodel;
                     viewmodel.policemen = data.policemen;
+                    viewmodel.housesLayer.clearLayers();
                     viewmodel.housesLayer.addData(data.houses);
                     OP.view.$searchResults.empty().removeClass('loader');
                     OP.view.$document.trigger('/op/houses/updated');
@@ -1135,8 +1135,17 @@ var OP = {};
 
 
         directGeocode: function (geocodingSearch, callback) {
-            $.getJSON('http://beta.openstreetmap.ru/api/search?q=' + geocodingSearch, function (result) {
-                callback(result);
+            var url = 'http://beta.openstreetmap.ru/api/search?callback=?&q=' + geocodingSearch;
+            $.ajax({
+                type: 'GET',
+                url: url,
+                async: false,
+                jsonpCallback: 'jsonCallback',
+                contentType: "application/json",
+                dataType: 'jsonp',
+                success: function (result) {
+                    callback(result);
+                }
             });
         }
     });

@@ -67,7 +67,6 @@
             }
 
             OP.view.$searchResults.empty().addClass('loader');
-            viewmodel.housesLayer.clearLayers();
             viewmodel.policemen = [];
             this.ajaxGetHouses();
         },
@@ -79,8 +78,7 @@
 
 
         ajaxGetHouses: function () {
-            var context = this,
-                url = document.url_root + 'houses';
+            var url = document.url_root + 'houses';
             $.ajax({
                 type: "GET",
                 url: url,
@@ -89,11 +87,13 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                    var viewmodel = OP.viewmodel;
+                    var viewmodel = OP.viewmodel,
+                        view = OP.viewmodel;
                     viewmodel.policemen = data.policemen;
+                    viewmodel.housesLayer.clearLayers();
                     viewmodel.housesLayer.addData(data.houses);
-                    OP.view.$searchResults.empty().removeClass('loader');
-                    OP.view.$document.trigger('/op/houses/updated');
+                    view.$searchResults.empty().removeClass('loader');
+                    view.$document.trigger('/op/houses/updated');
                 }
             });
         }
