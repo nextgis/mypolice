@@ -51,7 +51,7 @@
         <div class="title">Найди своего участкового по адресу</div>
         <div class="search">
             <label for="address">Москва, </label>
-            <input id="address" class="address" type="text" placeholder="например, Воздвиженка 10"/>
+            <input id="address" class="address" type="text" placeholder="например, Тверской бульвар 9"/>
             <input class="find btn" type="button" value="" title="Найти свой адрес"/>
         </div>
     </form>
