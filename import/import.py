@@ -68,7 +68,8 @@ def csv_row_to_policeman(row):
         'type': row[2],
         'rank': row[3],
         'phone': row[4],
-        'url': row[5]
+        'photo_url': row[5],
+        'url': row[6]
     }
 
 
@@ -81,6 +82,30 @@ with open(options.csv_file, 'rb') as csv_file:
     for row in reader:
         policeman = csv_row_to_policeman(row)
         policemen[policeman['id']] = policeman
+
+
+# ----------------------------------------
+# Read csv data of subdivisions MVD
+# ----------------------------------------
+def csv_row_to_subdivision(row):
+    return {
+        'id': row[0],
+        'name': row[1],
+        'phone': row[2],
+        'address': row[3],
+        'lat': row[4],
+        'lon': row[5],
+        'hours': row[6],
+        'url': row[7]
+    }
+
+print 'Reading MVD subdivisions csv file...'
+subdivisions = []
+with open(options.csv_file, 'rb') as csv_file:
+    reader = csv.reader(csv_file)
+    for row in reader:
+        subdivision = csv_row_to_policeman(row)
+        subdivisions.append(subdivision)
 
 
 # ----------------------------------------
@@ -114,8 +139,7 @@ conn = "dbname='{0}' host='{1}' user='{2}' password='{3}'". \
 con = psycopg2.connect(conn)
 cur = con.cursor()
 
-sql_policemen = "INSERT INTO policemen(id, name, type, rank, phone, url, color) VALUES "
-# sql_houses = "INSERT INTO houses(osm_id, building, street, suburb, house_num, name, address, geo, policeman_id) VALUES "
+sql_policemen = "INSERT INTO policemen(id, name, type, rank, phone, photo_url, url, color) VALUES "
 sql_houses = "INSERT INTO houses(osm_id, house_num, address, geo, policeman_id) VALUES "
 policeman_id = 0
 count_houses = 0
@@ -126,6 +150,7 @@ for k, policeman in policemen.iteritems():
         check_null(policeman['type']),
         check_null(policeman['rank']),
         check_null(policeman['phone']),
+        check_null(policeman['photo_url']),
         check_null(policeman['url']),
         check_null(get_random_color())
     ]) + ","
@@ -148,9 +173,10 @@ for k, policeman in policemen.iteritems():
             count_houses += 1
     policeman_id += 1
 
-print 'Clearing data on policemen and houses tables...'
+print 'Clearing data on policemen, subdivisions and houses tables...'
 cur.execute('DELETE FROM houses;')
 cur.execute('DELETE FROM policemen;')
+cur.execute('DELETE FROM subdivisions;')
 con.commit()
 print 'Clearing data has been successful!\n\r'
 
@@ -164,15 +190,44 @@ cur.execute(sql_houses[:-1] + ';')
 con.commit()
 print 'Import of houses has been successful!\n\r'
 
-print 'Rebuilding indexes on policemen and houses tables'
+sql_subdivision = "INSERT INTO subdivisions(id, name, phone, address, geo, hours, url) VALUES "
+subdivision_id = 0
+for subdivision in subdivisions:
+    if (not subdivision['lat']) or (not subdivision['lon']) or (subdivision['lat'] == '-9999') or \
+            (subdivision['lon'] == '-9999'):
+        geo = None
+    else:
+        geo = "ST_GeomFromText('POINT(" + str(subdivision['lon']) + " " + str(subdivision['lat']) + ")', 4326)"
+
+    sql_subdivision += get_values([
+        check_null(subdivision_id),
+        check_null(subdivision['name']),
+        check_null(subdivision['phone']),
+        check_null(subdivision['address']),
+        check_null(geo),
+        check_null(subdivision['hours']),
+        check_null(subdivision['url'])
+    ]) + ","
+
+    subdivision += 1
+
+print 'Starting import %s subdivisions...' % len(subdivisions)
+cur.execute(sql_subdivision[:-1] + ';')
+con.commit()
+print 'Import of subdivisions has been successful!\n\r'
+
+print 'Rebuilding indexes on policemen, subdivisions and houses tables'
 cur.execute('REINDEX TABLE policemen;')
 cur.execute('REINDEX TABLE houses;')
+cur.execute('REINDEX TABLE subdivisions;')
 con.commit()
 print 'Rebuild of indexes has been successful!\n\r'
 
 print 'Creating spatial index...'
 cur.execute('DROP INDEX IF EXISTS houses_spatial_index;')
+cur.execute('DROP INDEX IF EXISTS subdivisions_spatial_index;')
 cur.execute('CREATE INDEX houses_spatial_index ON houses USING GIST(geo);')
+cur.execute('CREATE INDEX subdivisions_spatial_index ON subdivisions USING GIST(geo);')
 con.commit()
 print 'Creation of spatial index has been successful!\n\r'
 

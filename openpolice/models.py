@@ -34,6 +34,7 @@ class Policeman(Base):
     type = Column(Text, index=True)
     rank = Column(Text, index=True)
     phone = Column(Text, index=True)
+    photo_url = Column(Text)
     url = Column(Text, index=True)
     color = Column(String(7), index=True)
 
@@ -51,3 +52,15 @@ class House(Base):
     geo = GeometryColumn(Geometry(2, 4326, bounding_box='(xmin=34, ymin=54, xmax=40, ymax=58)'), nullable=False)
     policeman = relationship('Policeman')
     policeman_id = Column(Integer, ForeignKey('policemen.id'), nullable=True)
+
+
+class Subdivision(Base):
+    __tablename__ = 'subdivisions'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Text, index=True)
+    phone = Column(Text, index=True)
+    address = Column(Text, index=True)
+    geo = GeometryColumn(Geometry(2, 4326, bounding_box='(xmin=34, ymin=54, xmax=40, ymax=58)'), nullable=False)
+    hours = Column(Text)
+    url = Column(Text)
