@@ -991,7 +991,8 @@ var OP = {};
                         policeman: policeman,
                         address: feature.properties.address
                     });
-                map.panTo(latlng);
+                var xx = $('#addressSearch').height();
+                map.panTo(latlng).panBy([0, -xx]);
                 map.openPopup(L.popup().setLatLng(latlng).setContent(html));
             });
         },
@@ -1025,8 +1026,7 @@ var OP = {};
 
 
         ajaxGetHouses: function () {
-            var context = this,
-                url = document.url_root + 'houses';
+            var url = document.url_root + 'houses';
             $.ajax({
                 type: "GET",
                 url: url,
@@ -1035,12 +1035,13 @@ var OP = {};
                 },
                 dataType: 'json',
                 success: function (data) {
-                    var viewmodel = OP.viewmodel;
+                    var viewmodel = OP.viewmodel,
+                        view = OP.view;
                     viewmodel.policemen = data.policemen;
                     viewmodel.housesLayer.clearLayers();
                     viewmodel.housesLayer.addData(data.houses);
-                    OP.view.$searchResults.empty().removeClass('loader');
-                    OP.view.$document.trigger('/op/houses/updated');
+                    view.$searchResults.empty().removeClass('loader');
+                    view.$document.trigger('/op/houses/updated');
                 }
             });
         }
@@ -1152,4 +1153,4 @@ var OP = {};
 })(jQuery, OP);OP.templates = {};
 OP.templates['search-item'] = Mustache.compile('<ul class="search-block"> {{#matches}} <li class="address" data-lat={{lat}} data-lng={{lon}}>{{display_name}}</li> {{/matches}} {{^matches}} <li class="empty-result">Адрес не найден</li> {{/matches}} </ul>');
 OP.templates['policemen-symbols'] = Mustache.compile('<ul> {{#policemen}} <li> <div style="border-color: {{color}}"><span style="background-color: {{color}}"></span></div> {{name}} </li> {{/policemen}} {{^policemen}} <li> Ответственных участковых для этого участка не найдено </li> {{/policemen}} </ul>');
-OP.templates['house-popup'] = Mustache.compile('<table id="popup" class="table table-striped"> <tr> <td>ФИО</td> <td>{{policeman.name}}</td> </tr> <tr> <td>Должность</td> <td>{{policeman.type}}</td> </tr> <tr> <td>Звание</td> <td>{{policeman.rank}}</td> </tr> <tr> <td>Телефон</td> <td>{{policeman.phone}}</td> </tr> <tr> <td>Ссылка</td> <td><a title="Страница полицейского на 112.ru" href="{{policeman.url}}" target="_blank">112.ru</a></td> </tr> <tr> <td>Адрес</td> <td>{{address}}</td> </tr> </table>');
+OP.templates['house-popup'] = Mustache.compile('<img src="{{policeman.photo_url}}"/> <table id="popup" class="table table-striped"> <tr> <td>ФИО</td> <td>{{policeman.name}}</td> </tr> <tr> <td>Должность</td> <td>{{policeman.type}}</td> </tr> <tr> <td>Звание</td> <td>{{policeman.rank}}</td> </tr> <tr> <td>Телефон</td> <td>{{policeman.phone}}</td> </tr> <tr> <td>Ссылка</td> <td><a title="Страница полицейского на 112.ru" href="{{policeman.url}}" target="_blank">112.ru</a></td> </tr> <tr> <td>Адрес</td> <td>{{address}}</td> </tr> </table>');

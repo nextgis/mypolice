@@ -42,6 +42,7 @@ def get_houses(context, request):
                 'rank': policeman.rank,
                 'phone': policeman.phone,
                 'url': policeman.url,
+                'photo_url': policeman.photo_url,
                 'color': policeman.color
             }
 

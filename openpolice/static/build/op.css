@@ -117,6 +117,16 @@ body {
     z-index: 150;
 }
 
+#map .leaflet-popup-content {
+    text-align: center;
+}
+
+#map .leaflet-popup-content img {
+    display: inline-block;
+    width: 200px;
+    margin: 3px;
+}
+
 #popup td {
     line-height: 18px;
     padding: 0 5px;

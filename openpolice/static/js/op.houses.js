@@ -46,6 +46,7 @@
                     });
                 map.panTo(latlng);
                 map.openPopup(L.popup().setLatLng(latlng).setContent(html));
+                map.panBy([0, -100]);
             });
         },
 
@@ -88,7 +89,7 @@
                 dataType: 'json',
                 success: function (data) {
                     var viewmodel = OP.viewmodel,
-                        view = OP.viewmodel;
+                        view = OP.view;
                     viewmodel.policemen = data.policemen;
                     viewmodel.housesLayer.clearLayers();
                     viewmodel.housesLayer.addData(data.houses);

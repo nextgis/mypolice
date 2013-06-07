@@ -61,6 +61,6 @@ class Subdivision(Base):
     name = Column(Text, index=True)
     phone = Column(Text, index=True)
     address = Column(Text, index=True)
-    geo = GeometryColumn(Geometry(2, 4326, bounding_box='(xmin=34, ymin=54, xmax=40, ymax=58)'), nullable=False)
+    geo = GeometryColumn(Geometry(2, 4326, bounding_box='(xmin=34, ymin=54, xmax=40, ymax=58)'))
     hours = Column(Text)
     url = Column(Text)

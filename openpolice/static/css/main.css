@@ -104,8 +104,14 @@ body {
     width: 100%;
 }
 
-#map div.leaflet-popup {
-    z-index: 150;
+#map .leaflet-popup-content {
+    text-align: center;
+}
+
+#map .leaflet-popup-content img {
+    display: inline-block;
+    height: 150px;
+    margin: 3px;
 }
 
 #popup td {

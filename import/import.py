@@ -11,6 +11,7 @@ parser.add_option("--u", dest="user")
 parser.add_option("--p", dest="password")
 parser.add_option("--s", dest="shp_file")
 parser.add_option("--c", dest="csv_file")
+parser.add_option("--cm", dest="csv_file_mvd")
 
 (options, args) = parser.parse_args()
 
@@ -101,10 +102,10 @@ def csv_row_to_subdivision(row):
 
 print 'Reading MVD subdivisions csv file...'
 subdivisions = []
-with open(options.csv_file, 'rb') as csv_file:
+with open(options.csv_file_mvd, 'rb') as csv_file:
     reader = csv.reader(csv_file)
     for row in reader:
-        subdivision = csv_row_to_policeman(row)
+        subdivision = csv_row_to_subdivision(row)
         subdivisions.append(subdivision)
 
 
@@ -195,7 +196,7 @@ subdivision_id = 0
 for subdivision in subdivisions:
     if (not subdivision['lat']) or (not subdivision['lon']) or (subdivision['lat'] == '-9999') or \
             (subdivision['lon'] == '-9999'):
-        geo = None
+        geo = "NULL"
     else:
         geo = "ST_GeomFromText('POINT(" + str(subdivision['lon']) + " " + str(subdivision['lat']) + ")', 4326)"
 
@@ -204,12 +205,12 @@ for subdivision in subdivisions:
         check_null(subdivision['name']),
         check_null(subdivision['phone']),
         check_null(subdivision['address']),
-        check_null(geo),
+        geo,
         check_null(subdivision['hours']),
         check_null(subdivision['url'])
     ]) + ","
 
-    subdivision += 1
+    subdivision_id += 1
 
 print 'Starting import %s subdivisions...' % len(subdivisions)
 cur.execute(sql_subdivision[:-1] + ';')
