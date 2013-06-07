@@ -60,6 +60,9 @@
 <div id="rightPanel">
     <a class="logo-nextgis" title="Перейти к сайту разработчика NextGIS" href="http://nextgis.ru/"></a>
     <a class="help" title="О проекте" href="http://gis-lab.info/qa/openpolice.html"></a>
+    <a class="facebook" target="_blank" title="Поделиться с друзьями на Facebook" href="https://www.facebook.com/sharer/sharer.php?u=example.org"></a>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://demo.nextgis.ru/openpolice/" data-lang="ru" data-hashtags="nextgis">Твитнуть</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <div class="permalink">
     <a id="permalink" name="Ссылка на текущую область">Ссылка на карту</a>

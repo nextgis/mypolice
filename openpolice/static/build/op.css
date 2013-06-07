@@ -136,9 +136,9 @@ body {
 }
 
 #rightPanel a {
-    opacity: 0.5;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-    filter: alpha(opacity=50);
+    opacity: 0.6;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+    filter: alpha(opacity=60);
     cursor: pointer;
     border: none;
 }
@@ -158,11 +158,22 @@ body {
     margin-left: 10px;
 }
 
-#rightPanel a.logo-nextgis:hover,
-#rightPanel a.help:hover {
+#rightPanel a:hover {
     opacity: 1.0;
     -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
     filter: alpha(opacity=100);
+}
+
+#rightPanel a.facebook {
+    display: inline-block;
+    width: 81px;
+    height: 35px;
+    background: url("../images/op-sprite.png") -197px -80px;
+    margin-left: 10px;
+}
+
+.twitter-share-button {
+    margin-bottom: 7px;
 }
 
 #legend {
