@@ -279,3 +279,12 @@ body.searcher-collapsed #map .leaflet-control-container .leaflet-top.leaflet-lef
 #map .leaflet-bottom .leaflet-control-scale {
     margin-bottom: 1px;
 }
+
+div.permalink {
+    position: absolute;
+    right: 5px;
+    bottom: 25px;
+    background-color: rgba(255, 255, 255, 0.698);
+    box-shadow: 0 0 5px #BBBBBB;
+    margin: 0;
+}

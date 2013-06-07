@@ -26,6 +26,7 @@ var OP = {};
         initModules: function () {
             try {
                 OP.search.init();
+                OP.permalink.init();
                 OP.map.init();
                 OP.houses.init();
                 OP.houses.legend.init();

@@ -656,6 +656,7 @@ var OP = {};
         initModules: function () {
             try {
                 OP.search.init();
+                OP.permalink.init();
                 OP.map.init();
                 OP.houses.init();
                 OP.houses.legend.init();
@@ -853,6 +854,38 @@ var OP = {};
 })(jQuery, OP);(function ($, OP) {
 
     $.extend(OP.viewmodel, {
+    });
+
+    $.extend(OP.view, {
+        $permalink: null
+    });
+
+    OP.permalink = {};
+    $.extend(OP.permalink, {
+        init: function () {
+            this.setDomOptions();
+            this.bindEvents();
+        },
+
+
+        setDomOptions: function () {
+            OP.view.$permalink = $('#permalink');
+        },
+
+
+        bindEvents: function () {
+            OP.view.$document.on('/op/permalink/update', function (event, latlng, zoom) {
+                OP.view.$permalink.prop("href", document['url_root'] +
+                    '?lat=' + latlng.lat +
+                    '&lng=' + latlng.lng +
+                    '&z=' + zoom);
+            });
+        }
+    });
+})(jQuery, OP);
+(function ($, OP) {
+
+    $.extend(OP.viewmodel, {
         map: null
     });
 
@@ -878,19 +911,28 @@ var OP = {};
 
         buildMap: function () {
             var viewmodel = OP.viewmodel,
-                lastExtent = this.getLastExtent();
+                extentFromUrl = this.getExtentFromUrl(),
+                lastExtent;
 
             OP.view.$map = $('#map');
             viewmodel.map = new L.Map('map', {'minZoom': 17});
 
             L.control.scale().addTo(viewmodel.map);
 
-            if (lastExtent) {
-                viewmodel.map.setView(lastExtent.latlng, lastExtent.zoom);
+            if (extentFromUrl) {
+                viewmodel.map.setView(extentFromUrl.latlng, extentFromUrl.zoom);
+                this.setLastExtent(extentFromUrl.latlng, extentFromUrl.zoom);
             } else {
-                viewmodel.map.setView(this.defaultExtent.latlng, this.defaultExtent.zoom);
-                this.setLastExtent(this.defaultExtent.latlng, this.defaultExtent.zoom);
+                lastExtent = this.getLastExtent();
+                if (lastExtent) {
+                    viewmodel.map.setView(lastExtent.latlng, lastExtent.zoom);
+                } else {
+                    viewmodel.map.setView(this.defaultExtent.latlng, this.defaultExtent.zoom);
+                    this.setLastExtent(this.defaultExtent.latlng, this.defaultExtent.zoom);
+                }
             }
+
+            OP.view.$document.trigger('/op/permalink/update', [viewmodel.map.getCenter(), viewmodel.map.getZoom()]);
         },
 
 
@@ -925,6 +967,23 @@ var OP = {};
         },
 
 
+        getExtentFromUrl: function () {
+            var lat = parseFloat(this.getURLParameter('lat')),
+                lng = parseFloat(this.getURLParameter('lng')),
+                zoom = parseFloat(this.getURLParameter('z'));
+
+            if (lat && lng && zoom) {
+                return {'latlng': new L.LatLng(lat, lng), 'zoom': zoom};
+            }
+            return null;
+        },
+
+
+        getURLParameter: function (name) {
+            return decodeURI((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]);
+        },
+
+
         bindEvents: function () {
             var context = this;
 
@@ -932,6 +991,7 @@ var OP = {};
                 var map = OP.viewmodel.map;
                 context.setLastExtent(map.getCenter(), map.getZoom());
                 OP.view.$document.trigger('/op/map/moveend');
+                OP.view.$document.trigger('/op/permalink/update', [this.getCenter(), this.getZoom()]);
             });
 
             OP.view.$document.on('/op/map/setview', function (event, lat, lng, zoom) {
