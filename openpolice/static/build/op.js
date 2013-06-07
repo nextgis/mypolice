@@ -991,9 +991,9 @@ var OP = {};
                         policeman: policeman,
                         address: feature.properties.address
                     });
-                var xx = $('#addressSearch').height();
-                map.panTo(latlng).panBy([0, -xx]);
+                map.panTo(latlng);
                 map.openPopup(L.popup().setLatLng(latlng).setContent(html));
+                map.panBy([0, -100]);
             });
         },
 
