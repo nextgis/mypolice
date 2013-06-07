@@ -45,7 +45,7 @@
                         address: feature.properties.address
                     });
                 map.panTo(latlng);
-                map.openPopup(L.popup().setLatLng(latlng).setContent(html));
+                map.openPopup(L.popup({maxWidth: 400}).setLatLng(latlng).setContent(html));
                 map.panBy([0, -100]);
             });
         },
