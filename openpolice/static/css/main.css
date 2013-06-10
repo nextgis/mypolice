@@ -120,6 +120,12 @@ body {
     padding: 0 5px;
 }
 
+#map .subdivision {
+    background: url("../images/op-sprite.png") -118px 0px;
+    width: 32px;
+    height: 32px;
+}
+
 #rightPanel {
     position: absolute;
     bottom: 5px;
@@ -225,7 +231,7 @@ body {
     display: inline-block;
     width: 30px;
     height: 14px;
-    border: 1px solid;
+    border: 2px solid;
 }
 
 #legend li span {

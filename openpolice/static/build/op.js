@@ -659,6 +659,7 @@ var OP = {};
                 OP.permalink.init();
                 OP.map.init();
                 OP.houses.init();
+                OP.subdivisions.init();
                 OP.houses.legend.init();
                 OP.osm.geocoder.init();
             } catch (e) {
@@ -1104,6 +1105,7 @@ var OP = {};
                     viewmodel.housesLayer.addData(data.houses);
                     view.$searchResults.empty().removeClass('loader');
                     view.$document.trigger('/op/houses/updated');
+                    view.$document.trigger('/op/subdivisions/update', [data.subdivisions]);
                 }
             });
         }
@@ -1174,6 +1176,76 @@ var OP = {};
 })(jQuery, OP);(function ($, OP) {
 
     $.extend(OP.viewmodel, {
+        subdivisionsLayer: null,
+        subdivisions: null
+    });
+
+    $.extend(OP.view, {
+    });
+
+    OP.subdivisions = {};
+    $.extend(OP.subdivisions, {
+
+
+        init: function () {
+            this.buildSubdivisionsLayer();
+            this.bindEvents();
+        },
+
+
+        buildSubdivisionsLayer: function () {
+            var viewmodel = OP.viewmodel;
+            viewmodel.subdivisionsLayer = L.layerGroup().addTo(viewmodel.map);
+        },
+
+
+        bindEvents: function () {
+            var context = this;
+
+            OP.view.$document.on('/op/subdivisions/update', function (event, subdivisions) {
+                context.updateSubdivisions(subdivisions);
+            });
+        },
+
+
+        updateSubdivisions: function (subdivisions) {
+            var viewmodel = OP.viewmodel,
+                subdivisionId,
+                subdivision,
+                latlng,
+                marker,
+                html,
+                map;
+            viewmodel.subdivisions = subdivisions;
+            viewmodel.subdivisionsLayer.clearLayers();
+            for (subdivisionId in subdivisions) {
+                if (subdivisions.hasOwnProperty(subdivisionId)) {
+                    latlng = [subdivisions[subdivisionId].geo.coordinates[1],
+                        subdivisions[subdivisionId].geo.coordinates[0]];
+                    marker = L.marker(latlng, {
+                        icon: L.divIcon({
+                            className: 'subdivision',
+                            iconSize: [32, 32]
+                        })
+                    }).on('click', function (event) {
+                        latlng = this.getLatLng();
+                        html = OP.templates['subdivision-popup']({
+                            subdivision: OP.viewmodel.subdivisions[this.id]
+                        });
+                        map = OP.viewmodel.map;
+                        map.panTo(latlng);
+                        map.openPopup(L.popup().setLatLng(latlng).setContent(html));
+                        map.panBy([0, -100]);
+                    });
+                    marker.id = subdivisionId;
+                    marker.addTo(OP.viewmodel.map);
+                }
+            }
+        }
+    });
+})(jQuery, OP);(function ($, OP) {
+
+    $.extend(OP.viewmodel, {
     });
 
     $.extend(OP.view, {
@@ -1216,3 +1288,4 @@ var OP = {};
 OP.templates['search-item'] = Mustache.compile('<ul class="search-block"> {{#matches}} <li class="address" data-lat={{lat}} data-lng={{lon}}>{{display_name}}</li> {{/matches}} {{^matches}} <li class="empty-result">Адрес не найден</li> {{/matches}} </ul>');
 OP.templates['policemen-symbols'] = Mustache.compile('<ul> {{#policemen}} <li> <div style="border-color: {{color}}"><span style="background-color: {{color}}"></span></div> {{name}} </li> {{/policemen}} {{^policemen}} <li> Ответственных участковых для этого участка не найдено </li> {{/policemen}} </ul>');
 OP.templates['house-popup'] = Mustache.compile('<table id="popup" class="table table-striped"> <tr> <td rowspan="6"><img src="{{policeman.photo_url}}"/></td> <td>ФИО</td> <td>{{policeman.name}}</td> </tr> <tr> <td>Должность</td> <td>{{policeman.type}}</td> </tr> <tr> <td>Звание</td> <td>{{policeman.rank}}</td> </tr> <tr> <td>Телефон</td> <td>{{policeman.phone}}</td> </tr> <tr> <td>Ссылка</td> <td><a title="Страница полицейского на 112.ru" href="{{policeman.url}}" target="_blank">112.ru</a></td> </tr> <tr> <td>Адрес</td> <td>{{address}}</td> </tr> </table>');
+OP.templates['subdivision-popup'] = Mustache.compile('<table id="popup" class="table table-striped"> <tr> <td>Название</td> <td>{{subdivision.name}}</td> </tr> <tr> <td>Тип</td> <td>{{subdivision.type}}</td> </tr> <tr> <td>Телефон</td> <td>{{subdivision.phone}}</td> </tr> <tr> <td>Адрес</td> <td>{{subdivision.address}}</td> </tr> <tr> <td>Время работы</td> <td>{{subdivision.hours}}</td> </tr> </table>');

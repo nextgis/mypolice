@@ -95,6 +95,7 @@
                     viewmodel.housesLayer.addData(data.houses);
                     view.$searchResults.empty().removeClass('loader');
                     view.$document.trigger('/op/houses/updated');
+                    view.$document.trigger('/op/subdivisions/update', [data.subdivisions]);
                 }
             });
         }

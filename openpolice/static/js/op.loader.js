@@ -29,6 +29,7 @@ var OP = {};
                 OP.permalink.init();
                 OP.map.init();
                 OP.houses.init();
+                OP.subdivisions.init();
                 OP.houses.legend.init();
                 OP.osm.geocoder.init();
             } catch (e) {

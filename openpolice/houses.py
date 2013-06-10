@@ -2,10 +2,9 @@ __author__ = 'karavanjo'
 
 from pyramid.view import view_config
 from pyramid.response import Response
-from models import DBSession, House, Policeman
-from helpers import leaflet_box_to_WKT_polygon
+from models import DBSession, House, Subdivision
+from helpers import leaflet_box_to_WKT_polygon, row2dict
 from geojson import Feature, FeatureCollection, dumps
-import json
 from shapely.wkb import loads
 
 
@@ -46,9 +45,20 @@ def get_houses(context, request):
                 'color': policeman.color
             }
 
+    subdivisions_in_box = session.query(Subdivision) \
+        .filter(Subdivision.geo.within(box)) \
+        .all()
+
+    subdivisions = {}
+    for subdivision_in_box in subdivisions_in_box:
+        subdivision = row2dict(subdivision_in_box, ['id', 'name', 'phone', 'address', 'hours', 'url'])
+        subdivision['geo'] = loads(str(subdivision_in_box.geo.geom_wkb))
+        subdivisions[subdivision['id']] = subdivision
+
     result = {
         'houses': FeatureCollection(houses),
-        'policemen': policemen
+        'policemen': policemen,
+        'subdivisions': subdivisions
     }
 
     return Response(dumps(result))

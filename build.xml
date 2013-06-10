@@ -24,6 +24,7 @@
             <file file="${rootProjectDirName}/static/js/op.map.js"/>
             <file file="${rootProjectDirName}/static/js/op.houses.js"/>
             <file file="${rootProjectDirName}/static/js/op.houses.legend.js"/>
+            <file file="${rootProjectDirName}/static/js/op.subdivisions.js"/>
             <file file="${rootProjectDirName}/static/js/op.osm.geocoder.js"/>
             <file file="${rootProjectDirName}/static/js/compile-templates.js"/>
 		</concat>

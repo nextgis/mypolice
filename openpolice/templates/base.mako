@@ -35,6 +35,7 @@
 ##    <script src="${request.static_url('openpolice:static/js/op.map.js')}"></script>
 ##    <script src="${request.static_url('openpolice:static/js/op.houses.js')}"></script>
 ##    <script src="${request.static_url('openpolice:static/js/op.houses.legend.js')}"></script>
+##    <script src="${request.static_url('openpolice:static/js/op.subdivisions.js')}"></script>
 ##    <script src="${request.static_url('openpolice:static/js/op.osm.geocoder.js')}"></script>
 </head>
 
