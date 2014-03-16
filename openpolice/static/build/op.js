@@ -1270,7 +1270,7 @@ var OP = {};
 
 
         directGeocode: function (geocodingSearch, callback) {
-            var url = 'http://beta.openstreetmap.ru/api/search?callback=?&q=' + geocodingSearch;
+            var url = 'http://openstreetmap.ru/api/search?callback=jsonCallback&q=' + geocodingSearch;
             $.ajax({
                 type: 'GET',
                 url: url,
@@ -1286,6 +1286,6 @@ var OP = {};
     });
 })(jQuery, OP);OP.templates = {};
 OP.templates['search-item'] = Mustache.compile('<ul class="search-block"> {{#matches}} <li class="address" data-lat={{lat}} data-lng={{lon}}>{{display_name}}</li> {{/matches}} {{^matches}} <li class="empty-result">Адрес не найден</li> {{/matches}} </ul>');
+OP.templates['subdivision-popup'] = Mustache.compile('<table id="popup" class="table table-striped"> <tr> <td>Название</td> <td>{{subdivision.name}}</td> </tr> <tr> <td>Тип</td> <td>{{subdivision.type}}</td> </tr> <tr> <td>Телефон</td> <td>{{subdivision.phone}}</td> </tr> <tr> <td>Адрес</td> <td>{{subdivision.address}}</td> </tr> <tr> <td>Время работы</td> <td>{{subdivision.hours}}</td> </tr> </table>');
 OP.templates['policemen-symbols'] = Mustache.compile('<ul> {{#policemen}} <li> <div style="border-color: {{color}}"><span style="background-color: {{color}}"></span></div> {{name}} </li> {{/policemen}} {{^policemen}} <li> Ответственных участковых для этого участка не найдено </li> {{/policemen}} </ul>');
 OP.templates['house-popup'] = Mustache.compile('<table id="popup" class="table table-striped"> <tr> <td rowspan="6"><img src="{{policeman.photo_url}}"/></td> <td>ФИО</td> <td>{{policeman.name}}</td> </tr> <tr> <td>Должность</td> <td>{{policeman.type}}</td> </tr> <tr> <td>Звание</td> <td>{{policeman.rank}}</td> </tr> <tr> <td>Телефон</td> <td>{{policeman.phone}}</td> </tr> <tr> <td>Ссылка</td> <td><a title="Страница полицейского на 112.ru" href="{{policeman.url}}" target="_blank">112.ru</a></td> </tr> <tr> <td>Адрес</td> <td>{{address}}</td> </tr> </table>');
-OP.templates['subdivision-popup'] = Mustache.compile('<table id="popup" class="table table-striped"> <tr> <td>Название</td> <td>{{subdivision.name}}</td> </tr> <tr> <td>Тип</td> <td>{{subdivision.type}}</td> </tr> <tr> <td>Телефон</td> <td>{{subdivision.phone}}</td> </tr> <tr> <td>Адрес</td> <td>{{subdivision.address}}</td> </tr> <tr> <td>Время работы</td> <td>{{subdivision.hours}}</td> </tr> </table>');
