@@ -34,6 +34,8 @@ def get_houses(context, request):
 
         policeman = house.policeman
         if not policeman.id in policemen:
+	    photo_url_parsed = 'http://112.ru/publish/00/00/uum/45000000000/45296000000/45296597000/img11.jpg'.split('/')	    
+	    photo_name = photo_url_parsed[-2] + photo_url_parsed[-1].replace('img', '_file')
             policemen[policeman.id] = {
                 'id': policeman.id,
                 'name': policeman.name,
@@ -41,7 +43,7 @@ def get_houses(context, request):
                 'rank': policeman.rank,
                 'phone': policeman.phone,
                 'url': policeman.url,
-                'photo_url': policeman.photo_url,
+                'photo_url': request.route_url('home') + 'static/images/' + photo_name,
                 'color': policeman.color
             }
 
