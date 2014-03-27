@@ -21,9 +21,9 @@ requires = [
     'shapely',
     ]
 
-setup(name='openpolice',
+setup(name='mypolice',
       version='0.0',
-      description='openpolice',
+      description='mypolice',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
         "Programming Language :: Python",
@@ -38,12 +38,12 @@ setup(name='openpolice',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      test_suite='openpolice',
+      test_suite='mypolice',
       install_requires=requires,
       entry_points="""\
       [paste.app_factory]
-      main = openpolice:main
+      main = mypolice:main
       [console_scripts]
-      initialize_openpolice_db = openpolice.scripts.initializedb:main
+      initialize_mypolice_db = mypolice.scripts.initializedb:main
       """,
       )

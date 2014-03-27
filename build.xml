@@ -1,5 +1,5 @@
-<project name="openpolice">
-    <property name="rootProjectDirName" value="openpolice"/>
+<project name="mypolice">
+    <property name="rootProjectDirName" value="mypolice"/>
     <property name="cssJsFileName" value="op"/>
 
 
